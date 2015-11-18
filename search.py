@@ -47,6 +47,14 @@ class SearchProblem:
         """
         util.raiseNotDefined()
 
+class Node:
+    def __init__(self, gameState,action = None, parent = None, g = 1):
+        self.parent = parent
+        self.state = gameState
+        self.g = g
+        self.action = action
+        self.depth = self.parent.depth + 1
+
 
 def tinyMazeSearch(problem):
     """
@@ -97,6 +105,30 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     "*** YOUR CODE HERE ***"
     util.raiseNotDefined()
 
+def graphSearch(problem, fringe):
+    closed = set()
+    fringe.append(Node(problem.getStartState()))
+    while(True):
+        if fringe.isEmpty():
+            print "Failure: no solution"
+            return None
+        node = fringe.popLeft()
+        if node == problem.isGoalState(node.state):
+            return node
+        if node not in closed:
+            closed.append(node)
+        for child in expand(node, problem):
+            fringe.append(child)
+
+
+
+def expand(node, problem):
+    successors = set()
+    temp = problem.getSuccessors(node.state)
+    for x in temp:
+        child = Node(x(0),x(1),node,x(2))
+        successors.append(child)
+    return successors
 
 # Abbreviations
 bfs = breadthFirstSearch
