@@ -27,6 +27,7 @@ class SearchProblem:
         """
         util.raiseNotDefined()
 
+
     def getSuccessors(self, state):
         """
           state: Search state
@@ -48,12 +49,12 @@ class SearchProblem:
         util.raiseNotDefined()
 
 class Node:
-    def __init__(self, gameState,action = None, parent = None, g = 1):
+    def __init__(self, gameState,action = None, parent = None, g = 0, depth = 0):
         self.parent = parent
         self.state = gameState
-        self.g = g
         self.action = action
-        self.depth = self.parent.depth + 1
+        self.depth = depth
+        self.g = g
 
 
 def tinyMazeSearch(problem):
@@ -67,6 +68,7 @@ def tinyMazeSearch(problem):
     return  [s, s, w, s, w, w, s, w]
 
 def depthFirstSearch(problem):
+    return graphSearch(problem, util.Stack())
     """
     Search the deepest nodes in the search tree first.
 
@@ -81,9 +83,11 @@ def depthFirstSearch(problem):
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
     "*** YOUR CODE HERE ***"
+
     util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
+    return graphSearch(problem, util.Queue())
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
     util.raiseNotDefined()
@@ -106,27 +110,41 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     util.raiseNotDefined()
 
 def graphSearch(problem, fringe):
-    closed = set()
-    fringe.append(Node(problem.getStartState()))
+    closed = []
+    fringe.push(Node(problem.getStartState()))
     while(True):
         if fringe.isEmpty():
             print "Failure: no solution"
             return None
-        node = fringe.popLeft()
-        if node == problem.isGoalState(node.state):
-            return node
-        if node not in closed:
-            closed.append(node)
-        for child in expand(node, problem):
-            fringe.append(child)
+        node = fringe.pop()
+        if problem.isGoalState(node.state):
+            return solution(node)
+        if node.state not in closed:
+            closed.append(node.state)
+            for child in expand(node, problem):
+                fringe.push(child)
+
+
+def solution(node):
+    solution = []
+
+    while(True):
+        if node.parent == None:
+            break
+        else:
+            solution.append(node.action)
+            node = node.parent
+    solution.reverse()
+    return solution
+
 
 
 
 def expand(node, problem):
-    successors = set()
+    successors = []
     temp = problem.getSuccessors(node.state)
     for x in temp:
-        child = Node(x(0),x(1),node,x(2))
+        child = Node(x[0],x[1],node, node.g + x[2], node.depth + 1)
         successors.append(child)
     return successors
 
