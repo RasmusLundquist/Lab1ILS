@@ -27,6 +27,7 @@ class SearchProblem:
         """
         util.raiseNotDefined()
 
+
     def getSuccessors(self, state):
         """
           state: Search state
@@ -48,12 +49,12 @@ class SearchProblem:
         util.raiseNotDefined()
 
 class Node:
-    def __init__(self, gameState,action = None, parent = None, g = 1):
+    def __init__(self, gameState,action = None, parent = None, g = 0, depth = 0):
         self.parent = parent
         self.state = gameState
-        self.g = g
         self.action = action
         self.depth = self.parent.depth + 1
+        self.g = g
 
 
 def tinyMazeSearch(problem):
@@ -67,6 +68,7 @@ def tinyMazeSearch(problem):
     return  [s, s, w, s, w, w, s, w]
 
 def depthFirstSearch(problem):
+    graphSearch(problem, util.Queue())
     """
     Search the deepest nodes in the search tree first.
 
@@ -107,26 +109,26 @@ def aStarSearch(problem, heuristic=nullHeuristic):
 
 def graphSearch(problem, fringe):
     closed = set()
-    fringe.append(Node(problem.getStartState()))
+    fringe.push(Node(problem.getStartState()))
     while(True):
         if fringe.isEmpty():
             print "Failure: no solution"
             return None
-        node = fringe.popLeft()
+        node = fringe.pop
         if node == problem.isGoalState(node.state):
             return node
         if node not in closed:
-            closed.append(node)
+            closed.add(node)
         for child in expand(node, problem):
-            fringe.append(child)
+            fringe.push(child)
 
 
 
 def expand(node, problem):
-    successors = set()
+    successors = []
     temp = problem.getSuccessors(node.state)
     for x in temp:
-        child = Node(x(0),x(1),node,x(2))
+        child = Node(x(0),x(1),node, node.g + x(2), node.depth + 1)
         successors.append(child)
     return successors
 
