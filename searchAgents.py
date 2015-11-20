@@ -282,12 +282,10 @@ class CornersProblem(search.SearchProblem):
         Returns the start state (in your state space, not the full Pacman state
         space)
         """
-<<<<<<< HEAD
         "*** YOUR CODE HERE ***"
         self.startingPosition
-=======
+
         return self.startingPosition
->>>>>>> 0ec4e84c53b7a708e8e3789edb93e942ffc6a681
         util.raiseNotDefined()
 
     def isGoalState(self, state):
