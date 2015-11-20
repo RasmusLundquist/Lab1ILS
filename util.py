@@ -1,6 +1,7 @@
 import sys
 import inspect
 import heapq, random
+import game
 import cStringIO
 
 
@@ -637,3 +638,6 @@ def unmutePrint():
     sys.stdout = _ORIGINAL_STDOUT
     #sys.stderr = _ORIGINAL_STDERR
 
+def priorityFunction(node):
+    """hCost = manhattanDistance(game.AgentState.getPosition())"""
+    return node.g

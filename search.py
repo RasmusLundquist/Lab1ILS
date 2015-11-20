@@ -4,6 +4,8 @@ Pacman agents (in searchAgents.py).
 """
 
 import util
+import searchAgents
+
 
 class SearchProblem:
     """
@@ -95,6 +97,7 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
+    return graphSearch(problem, util.PriorityQueueWithFunction(util.priorityFunction))
     util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
@@ -104,9 +107,10 @@ def nullHeuristic(state, problem=None):
     """
     return 0
 
-def aStarSearch(problem, heuristic=nullHeuristic):
+def aStarSearch(problem, heuristic = nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
+    return graphSearch(problem, util.PriorityQueueWithFunction(util.priorityFunction))
     util.raiseNotDefined()
 
 def graphSearch(problem, fringe):
@@ -148,6 +152,8 @@ def expand(node, problem):
         child = Node(x[0],x[1],node, node.g + x[2], node.depth + 1)
         successors.append(child)
     return successors
+
+
 
 # Abbreviations
 bfs = breadthFirstSearch
