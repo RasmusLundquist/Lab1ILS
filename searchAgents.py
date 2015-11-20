@@ -316,7 +316,7 @@ class CornersProblem(search.SearchProblem):
         "*** YOUR CODE HERE ***"
 
         successors = []
-        action = []
+        actions = []
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             # Add a successor state to the successor list if the action is legal
             # Here's a code snippet for figuring out whether a new position hits a wall:
@@ -332,8 +332,10 @@ class CornersProblem(search.SearchProblem):
             nextX, nextY = int(x + dX), int(y + dY)
             if not self.walls[nextX][nextY]:
                 nextState = (nextX, nextY)
-                cost = self.getCostOfActions(action)
-                successors.append((nextState, action, cost))
+                #cost = self.getCostOfActions(action)
+                successors.append((nextState, action, 1))
+                #actions.append(action)
+        #self.getCostOfActions(actions)
         return successors
 
     def getCostOfActions(self, actions):
@@ -341,10 +343,10 @@ class CornersProblem(search.SearchProblem):
         Returns the cost of a particular sequence of actions.  If those actions
         include an illegal move, return 999999.  This is implemented for you.
         """
-        if actions == None: return 999999
+        if actions is None: return 999999
         x,y = self.startingPosition
         for action in actions:
-            dx, dy = Actions.directionToVector(actions)
+            dx, dy = Actions.directionToVector(action)
             x, y = int(x + dx), int(y + dy)
             if self.walls[x][y]: return 999999
         return len(actions)
