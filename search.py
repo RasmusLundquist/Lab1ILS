@@ -51,12 +51,14 @@ class SearchProblem:
         util.raiseNotDefined()
 
 class Node:
-    def __init__(self, gameState,action = None, parent = None, g = 0, depth = 0):
+    def __init__(self, gameState,action = None, parent = None, g = 0, depth = 0, h = 0):
         self.parent = parent
         self.state = gameState
         self.action = action
         self.depth = depth
         self.g = g
+        self.h  = h
+
 
 
 def tinyMazeSearch(problem):
@@ -110,7 +112,7 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic = nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    return graphSearch(problem, util.PriorityQueueWithFunction(util.priorityFunction))
+    return graphSearch(problem, util.PriorityQueueWithFunction(util.aStarPriorityFunction))
     util.raiseNotDefined()
 
 def graphSearch(problem, fringe):
@@ -150,6 +152,7 @@ def expand(node, problem):
     temp = problem.getSuccessors(node.state)
     for x in temp:
         child = Node(x[0],x[1],node, node.g + x[2], node.depth + 1)
+        child.h = searchAgents.manhattanHeuristic(child.state, problem)
         successors.append(child)
     return successors
 

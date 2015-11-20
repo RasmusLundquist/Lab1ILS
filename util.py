@@ -639,5 +639,7 @@ def unmutePrint():
     #sys.stderr = _ORIGINAL_STDERR
 
 def priorityFunction(node):
-    """hCost = manhattanDistance(game.AgentState.getPosition())"""
     return node.g
+
+def aStarPriorityFunction(node):
+    return node.g + node.h
