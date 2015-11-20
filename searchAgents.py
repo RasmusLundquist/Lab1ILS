@@ -26,7 +26,6 @@ from game import Actions
 import util
 import time
 import search
-import pacman
 
 class GoWestAgent(Agent):
     "An agent that goes West until it can't."
@@ -276,6 +275,7 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         "*** YOUR CODE HERE ***"
+        self.unVisited = [(1,1), (1,top), (right, 1), (right, top)]
 
     def getStartState(self):
         """
@@ -283,20 +283,22 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
-        self.startingPosition
-
         return self.startingPosition
-        util.raiseNotDefined()
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
-        """for corner in self.corners:
-            if pacman.hasFood(corner):
-                return False
+        for corner in self.corners:
+            if corner == state:
+                for x in self.unVisited:
+                    if x == corner:
+                        self.unVisited.remove(corner)
+
+        if self.unVisited == []:
+            return True
         else:
-            return True"""
+            return False
 
         "*** YOUR CODE HERE ***"
         util.raiseNotDefined()
@@ -310,9 +312,11 @@ class CornersProblem(search.SearchProblem):
             action, stepCost), where 'successor' is a successor to the current
             state, 'action' is the action required to get there, and 'stepCost'
             is the incremental cost of expanding to that successor
-        """
+        """\
+        "*** YOUR CODE HERE ***"
 
         successors = []
+        action = []
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             # Add a successor state to the successor list if the action is legal
             # Here's a code snippet for figuring out whether a new position hits a wall:
@@ -320,18 +324,16 @@ class CornersProblem(search.SearchProblem):
             #   dx, dy = Actions.directionToVector(action)
             #   nextx, nexty = int(x + dx), int(y + dy)
             #   hitsWall = self.walls[nextx][nexty]
-            x,y = currentPosition
-            dx , dy = Actions.directionToVector(action)
-            nextx, nexty = int(x+dx), int(y+dy)
-            hitsWall = self.walls[nextx][nexty]
-            if not hitsWall:
-                nextState = (nextx, nexty)
-                cost = self.getCostOfActions(nextState)
-                successors.append( ( nextState, action, cost) )
-
-            "*** YOUR CODE HERE ***"
-
-        self._expanded += 1 # DO NOT CHANGE
+            x = state[0]
+            y = state[1]
+            direction = Actions.directionToVector(action)
+            dX = direction[0]
+            dY = direction[1]
+            nextX, nextY = int(x + dX), int(y + dY)
+            if not self.walls[nextX][nextY]:
+                nextState = (nextX, nextY)
+                cost = self.getCostOfActions(action)
+                successors.append((nextState, action, cost))
         return successors
 
     def getCostOfActions(self, actions):
@@ -340,9 +342,9 @@ class CornersProblem(search.SearchProblem):
         include an illegal move, return 999999.  This is implemented for you.
         """
         if actions == None: return 999999
-        x,y= self.startingPosition
+        x,y = self.startingPosition
         for action in actions:
-            dx, dy = Actions.directionToVector(action)
+            dx, dy = Actions.directionToVector(actions)
             x, y = int(x + dx), int(y + dy)
             if self.walls[x][y]: return 999999
         return len(actions)

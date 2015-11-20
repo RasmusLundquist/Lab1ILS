@@ -152,7 +152,7 @@ def expand(node, problem):
     temp = problem.getSuccessors(node.state)
     for x in temp:
         child = Node(x[0],x[1],node, node.g + x[2], node.depth + 1)
-        child.h = searchAgents.manhattanHeuristic(child.state, problem)
+        #child.h = searchAgents.manhattanHeuristic(child.state, problem)
         successors.append(child)
     return successors
 
