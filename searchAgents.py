@@ -26,6 +26,7 @@ from game import Actions
 import util
 import time
 import search
+import pacman
 
 class GoWestAgent(Agent):
     "An agent that goes West until it can't."
@@ -263,6 +264,7 @@ class CornersProblem(search.SearchProblem):
         """
         Stores the walls, pacman's starting position and corners.
         """
+
         self.walls = startingGameState.getWalls()
         self.startingPosition = startingGameState.getPacmanPosition()
         top, right = self.walls.height-2, self.walls.width-2
@@ -280,13 +282,19 @@ class CornersProblem(search.SearchProblem):
         Returns the start state (in your state space, not the full Pacman state
         space)
         """
-        "*** YOUR CODE HERE ***"
+        return self.startingPosition
         util.raiseNotDefined()
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
+        """for corner in self.corners:
+            if pacman.hasFood(corner):
+                return False
+        else:
+            return True"""
+
         "*** YOUR CODE HERE ***"
         util.raiseNotDefined()
 
@@ -309,6 +317,14 @@ class CornersProblem(search.SearchProblem):
             #   dx, dy = Actions.directionToVector(action)
             #   nextx, nexty = int(x + dx), int(y + dy)
             #   hitsWall = self.walls[nextx][nexty]
+            x,y = currentPosition
+            dx , dy = Actions.directionToVector(action)
+            nextx, nexty = int(x+dx), int(y+dy)
+            hitsWall = self.walls[nextx][nexty]
+            if not hitsWall:
+                nextState = (nextx, nexty)
+                cost = self.getCostOfActions(nextState)
+                successors.append( ( nextState, action, cost) )
 
             "*** YOUR CODE HERE ***"
 
