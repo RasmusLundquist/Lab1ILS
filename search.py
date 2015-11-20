@@ -125,6 +125,7 @@ def graphSearch(problem, fringe):
                 fringe.push(child)
 
 
+
 def solution(node):
     solution = []
 
