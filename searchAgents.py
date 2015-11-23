@@ -289,13 +289,7 @@ class CornersProblem(search.SearchProblem):
         """
         Returns whether this search state is a goal state of the problem.
         """
-        for node in self.unVisited:
-            if node == state:
-                for corner in self.corners:
-                    if node == corner:
-                        self.unVisited.remove(state)
-
-        if not self.unVisited:
+        if self.unVisited == []:
             return True
         else:
             return False
@@ -316,7 +310,7 @@ class CornersProblem(search.SearchProblem):
         "*** YOUR CODE HERE ***"
 
         successors = []
-        actions = []
+
         self._expanded += 1
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             # Add a successor state to the successor list if the action is legal
@@ -325,19 +319,16 @@ class CornersProblem(search.SearchProblem):
             #   dx, dy = Actions.directionToVector(action)
             #   nextx, nexty = int(x + dx), int(y + dy)
             #   hitsWall = self.walls[nextx][nexty]
-            x = state[0]
-            y = state[1]
-            previousState = state
-            direction = Actions.directionToVector(action)
-            dX = direction[0]
-            dY = direction[1]
+            x, y = state
+            dX, dY = Actions.directionToVector(action)
             nextX, nextY = int(x + dX), int(y + dY)
             nextState = (nextX, nextY)
+            temp = (nextX, nextY)
+            if temp in self.unVisited:
+                self.unVisited.remove(temp)
             if not self.walls[nextX][nextY]:
-                nextState = (nextX, nextY)
-                #cost = self.getCostOfActions(action)
                 successors.append((nextState, action, 1))
-                #actions.append(action)
+
         return successors
 
     def getCostOfActions(self, actions):
