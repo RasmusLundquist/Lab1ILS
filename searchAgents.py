@@ -323,11 +323,11 @@ class CornersProblem(search.SearchProblem):
             dX, dY = Actions.directionToVector(action)
             nextX, nextY = int(x + dX), int(y + dY)
             nextState = (nextX, nextY)
-            temp = (nextX, nextY)
-            if temp in self.unVisited:
-                self.unVisited.remove(temp)
+
             if not self.walls[nextX][nextY]:
                 successors.append((nextState, action, 1))
+                if nextState in self.unVisited:
+                    self.unVisited.remove(nextState)
 
         return successors
 
