@@ -289,6 +289,15 @@ class CornersProblem(search.SearchProblem):
         """
         Returns whether this search state is a goal state of the problem.
         """
+<<<<<<< HEAD
+=======
+        for corner in self.corners:
+            if corner == state:
+                for x in self.unVisited:
+                    if x == corner:
+                        self.unVisited.remove(corner)
+
+>>>>>>> cffb159e6261d863c9587ff5ef44123ed4dbbcd4
         if self.unVisited == []:
             return True
         else:
@@ -310,8 +319,11 @@ class CornersProblem(search.SearchProblem):
         "*** YOUR CODE HERE ***"
 
         successors = []
+<<<<<<< HEAD
 
         self._expanded += 1
+=======
+>>>>>>> cffb159e6261d863c9587ff5ef44123ed4dbbcd4
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             # Add a successor state to the successor list if the action is legal
             # Here's a code snippet for figuring out whether a new position hits a wall:
@@ -319,6 +331,7 @@ class CornersProblem(search.SearchProblem):
             #   dx, dy = Actions.directionToVector(action)
             #   nextx, nexty = int(x + dx), int(y + dy)
             #   hitsWall = self.walls[nextx][nexty]
+<<<<<<< HEAD
             x, y = state
             dX, dY = Actions.directionToVector(action)
             nextX, nextY = int(x + dX), int(y + dY)
@@ -329,6 +342,17 @@ class CornersProblem(search.SearchProblem):
                 if nextState in self.unVisited:
                     self.unVisited.remove(nextState)
 
+=======
+            x = state[0]
+            y = state[1]
+            direction = Actions.directionToVector(action)
+            dX = direction[0]
+            dY = direction[1]
+            nextX, nextY = int(x + dX), int(y + dY)
+            if not self.walls[nextX][nextY]:
+                nextState = (nextX, nextY)
+                successors.append((nextState, action, 1))
+>>>>>>> cffb159e6261d863c9587ff5ef44123ed4dbbcd4
         return successors
 
     def getCostOfActions(self, actions):
