@@ -61,21 +61,18 @@ class ReflexAgent(Agent):
         score = 0
 
 
-        """if powerpellet is true skit i det nedan"""
         if newScaredTimes > 0:
             for ghosts in newGhostStates:
                 if manhattanDistance(newPos, ghosts.getPosition()) <= 1:
                     score -= 470000
 
-        food = list(newFood)
+        if (currentGameState.getNumFood() > successorGameState.getNumFood()):
+            score += 100
 
-        for fo in food:
-            if manhattanDistance(newPos, fo) > 10 and fo == True:
-                score += 100
-            elif manhattanDistance(newPos, fo) < 10 and fo == True:
-                score += 250
-            elif manhattanDistance(newPos, fo) <= 1 and fo == True:
-                score += 500
+        x, y = newPos
+        if(newFood[x][y] == False):
+            score -= 100
+
 
         if action == Directions.STOP:
             score -= 50
@@ -119,6 +116,32 @@ class MinimaxAgent(MultiAgentSearchAgent):
     """
       Your minimax agent
     """
+    def maxValue(self, state):
+        reallyTinyNumber = -9999999
+        legalMoves = state.getLegalActions(self.index)
+        for moves in legalMoves:
+            self.depth -= 1
+            if(self.index == (state.getNumAgents()-1)):
+                self.index = 0
+            else:
+                self.index += 1
+            reallyTinyNumber = max(reallyTinyNumber,self.value(moves))
+
+        return rellyTinyNumber
+
+    def minValue(self, state):
+
+        reallyLargeNumber = 9999999
+        legalMoves = state.getLegalActions(self.index)
+        for moves in legalMoves:
+            self.depth -= 1
+            if(self.index == (state.getNumAgents()-1)):
+                self.index = 0
+            else:
+                self.index += 1
+            reallyLargeNumber = min(reallyLargeNumber, self.value(moves))
+
+        return reallyLargeNumber
 
     def getAction(self, gameState):
         """
@@ -138,8 +161,27 @@ class MinimaxAgent(MultiAgentSearchAgent):
             Returns the total number of agents in the game
         """
         "*** YOUR CODE HERE ***"
+
+
+
+        chosenIndex = self.value(gameState)
+        return chosenIndex
+
         
         util.raiseNotDefined()
+    def value(self, state):
+
+
+
+        if self.depth <= 0:
+            return (self.evaluationFunction(state))
+        elif self.index == 0:
+            return(self.maxValue(state))
+        else:
+            return(self.minValue(state))
+
+
+
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
     """
@@ -177,6 +219,7 @@ def betterEvaluationFunction(currentGameState):
     """
     "*** YOUR CODE HERE ***"
     util.raiseNotDefined()
+
 
 # Abbreviation
 better = betterEvaluationFunction
