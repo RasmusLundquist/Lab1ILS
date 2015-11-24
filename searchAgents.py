@@ -275,7 +275,7 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         "*** YOUR CODE HERE ***"
-        self.unVisited = [(1,1), (1,top), (right, 1), (right, top)]
+
 
     def getStartState(self):
         """
@@ -283,17 +283,16 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
-        return self.startingPosition
+        return self.startingPosition, self.corners
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
-
-        if self.unVisited == []:
-            return True
-        else:
-            return False
+        if state[0] in self.corners:
+            if not state[1]:
+                return True
+        return False
 
         "*** YOUR CODE HERE ***"
         util.raiseNotDefined()
@@ -311,7 +310,7 @@ class CornersProblem(search.SearchProblem):
         "*** YOUR CODE HERE ***"
 
         successors = []
-
+        x, y = state[0]
         self._expanded += 1
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
 
@@ -322,16 +321,18 @@ class CornersProblem(search.SearchProblem):
             #   nextx, nexty = int(x + dx), int(y + dy)
             #   hitsWall = self.walls[nextx][nexty]
 
-            x, y = state
+
             dX, dY = Actions.directionToVector(action)
             nextX, nextY = int(x + dX), int(y + dY)
             nextState = (nextX, nextY)
-
-            if not self.walls[nextX][nextY]:
-                successors.append((nextState, action, 1))
-                if nextState in self.unVisited:
-                    self.unVisited.remove(nextState)
-
+            temp1 = state[1]
+            temp = temp1 [:]
+            hitsWall = self.walls[nextX][nextY]
+            if  hitsWall:
+                continue
+            if nextState in state[1]:
+                temp = tuple(x for x in state[1] if x != nextState)
+            successors.append(((nextState, temp), action, 1))
         return successors
 
     def getCostOfActions(self, actions):
