@@ -116,32 +116,6 @@ class MinimaxAgent(MultiAgentSearchAgent):
     """
       Your minimax agent
     """
-    def maxValue(self, state):
-        reallyTinyNumber = -9999999
-        legalMoves = state.getLegalActions(self.index)
-        for moves in legalMoves:
-            self.depth -= 1
-            if(self.index == (state.getNumAgents()-1)):
-                self.index = 0
-            else:
-                self.index += 1
-            reallyTinyNumber = max(reallyTinyNumber,self.value(moves))
-
-        return rellyTinyNumber
-
-    def minValue(self, state):
-
-        reallyLargeNumber = 9999999
-        legalMoves = state.getLegalActions(self.index)
-        for moves in legalMoves:
-            self.depth -= 1
-            if(self.index == (state.getNumAgents()-1)):
-                self.index = 0
-            else:
-                self.index += 1
-            reallyLargeNumber = min(reallyLargeNumber, self.value(moves))
-
-        return reallyLargeNumber
 
     def getAction(self, gameState):
         """
@@ -162,25 +136,50 @@ class MinimaxAgent(MultiAgentSearchAgent):
         """
         "*** YOUR CODE HERE ***"
 
+        bestPlay = self.value(gameState, self.index, self.depth)
 
-
-        chosenIndex = self.value(gameState)
-        return chosenIndex
-
+        return bestPlay[1]
         
-        util.raiseNotDefined()
-    def value(self, state):
 
-
-
-        if self.depth <= 0:
+    def value(self, state, index, depth):
+        if depth == 0 or state.isWin() or state.isLose():
             return (self.evaluationFunction(state))
-        elif self.index == 0:
-            return(self.maxValue(state))
+        elif index == 0:
+            return(self.max(state, index, depth))
         else:
-            return(self.minValue(state))
+            return(self.mini(state, index, depth))
 
+    def mini(self, state, index, depth):
+        v = (float("inf"), None)
+        numberOfGhost = state.getNumAgents()-1
+        legalActions = state.getLegalActions(index)
+        if index == numberOfGhost:
+            for action in legalActions:
+                comparedAction = state.generateSuccessor(index, action)
+                temp = self.value(comparedAction,0, depth-1)
+                if temp < v[0]:
+                    v = (temp, action)
+                    print v[0]
+        else:
+            for action in legalActions:
+                comparedAction = state.generateSuccessor(index, action)
+                temp = self.value(comparedAction,index+1, depth)
+                if temp < v[0]:
+                    v = (temp, action)
+                    print v[0]
+        return v
 
+    def max(self, state, index, depth):
+        v = float("-inf"), None
+        legalActions = state.getLegalActions(self.index)
+        for action in legalActions:
+            comparedAction = state.generateSuccessor(index, action)
+            temp = self.value(comparedAction,index+1, depth)
+            if temp > v[0]:
+                v = (temp, action)
+                print v[0]
+
+        return v
 
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
@@ -194,6 +193,47 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
         """
         "*** YOUR CODE HERE ***"
         util.raiseNotDefined()
+
+
+    def value(self, state, index, depth, alpha, beta):
+        if depth == 0 or state.isWin() or state.isLose():
+            return (self.evaluationFunction(state))
+        elif index == 0:
+            return(self.max(state, index, depth))
+        else:
+            return(self.mini(state, index, depth))
+
+    def mini(self, state, index, depth, alpha, beta):
+        v = (float("inf"), None)
+        numberOfGhost = state.getNumAgents()-1
+        legalActions = state.getLegalActions(index)
+        if index == numberOfGhost:
+            for action in legalActions:
+                comparedAction = state.generateSuccessor(index, action)
+                temp = self.value(comparedAction,0, depth-1)
+                if temp < v[0]:
+                    v = (temp, action)
+                    print v[0]
+        else:
+            for action in legalActions:
+                comparedAction = state.generateSuccessor(index, action)
+                temp = self.value(comparedAction,index+1, depth)
+                if temp < v[0]:
+                    v = (temp, action)
+                    print v[0]
+        return v
+
+    def max(self, state, index, depth, alpha, beta):
+        v = float("-inf"), None
+        legalActions = state.getLegalActions(self.index)
+        for action in legalActions:
+            comparedAction = state.generateSuccessor(index, action)
+            temp = self.value(comparedAction,index+1, depth)
+            if temp > v[0]:
+                v = (temp, action)
+                print v[0]
+
+        return v
 
 class ExpectimaxAgent(MultiAgentSearchAgent):
     """
