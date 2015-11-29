@@ -365,7 +365,6 @@ def cornersHeuristic(state, problem):
     corners = problem.corners # These are the corner coordinates
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
-
     listOfCorners = state[1]
     firstCorner = listOfCorners[0]
     distance = euclideanHeuristic(state[0], firstCorner)

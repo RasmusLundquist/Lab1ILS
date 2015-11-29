@@ -156,7 +156,11 @@ def expand(node, problem):
         successors.append(child)
     return successors
 
+def priorityFunction(node):
+    return node.g
 
+def aStarPriorityFunction(node):
+    return node.g + node.h
 
 # Abbreviations
 bfs = breadthFirstSearch
